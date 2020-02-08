@@ -18,7 +18,7 @@ document.querySelector('.dice').style.display = 'none';
 
 document.getElementById('score-0').textContent = '0';
 document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
+document.getElementById('current-0').textContent = roundScore;
 document.getElementById('current-0').textContent = '0';
 
 document.querySelector('.btn-roll').addEventListener('click', function() {
@@ -30,9 +30,20 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
   diceDOM.style.display = 'block';
   diceDOM.src = '/img/dice-' + dice + '.png';
 
-  document.querySelector('#current-' + activePlayer).textContent = dice;
-
   // 3. Update the round score IF the rolled number was NOT a 1
+  if (dice !== 1) {
+    // Add score
+    roundScore += dice;
+    document.querySelector('#current-' + activePlayer).textContent = roundScore;
+  } else {
+    // Next player
+    roundScore = 0;
+    document.querySelector('#current-' + activePlayer).textContent = roundScore;
+    activePlayer === 0 ? activePlayer++ : activePlayer--;
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+    document.querySelector('.dice').style.display = 'none';
+  }
 });
 
 // Rewrite html element (Manipulate)
@@ -43,3 +54,6 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 // Read from html document (Access)
 // var x = document.querySelector('#score-0').textContent;
 // console.log(x);
+
+//document.querySelector('.player-0-panel').classList.remove('active');
+//document.querySelector('.player-1-panel').classList.add('active');
