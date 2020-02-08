@@ -18,8 +18,8 @@ document.querySelector('.dice').style.display = 'none';
 
 document.getElementById('score-0').textContent = '0';
 document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = roundScore;
 document.getElementById('current-0').textContent = '0';
+document.getElementById('current-1').textContent = '0';
 
 document.querySelector('.btn-roll').addEventListener('click', function() {
   // 1. Random number
@@ -37,14 +37,42 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     document.querySelector('#current-' + activePlayer).textContent = roundScore;
   } else {
     // Next player
-    roundScore = 0;
-    document.querySelector('#current-' + activePlayer).textContent = roundScore;
-    activePlayer === 0 ? activePlayer++ : activePlayer--;
-    document.querySelector('.player-0-panel').classList.toggle('active');
-    document.querySelector('.player-1-panel').classList.toggle('active');
-    document.querySelector('.dice').style.display = 'none';
+    nextPlayer();
   }
 });
+
+document.querySelector('.btn-hold').addEventListener('click', function() {
+  // Add round score to global score
+  scores[activePlayer] += roundScore;
+
+  // Update the ui
+  document.querySelector('#score-' + activePlayer).textContent =
+    scores[activePlayer];
+  // Check if player won the game
+  if (scores[activePlayer] >= 20) {
+    document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+    document.querySelector('.dice').style.display = 'none';
+    document
+      .querySelector('.player-' + activePlayer + '-panel')
+      .classList.add('winner');
+    document
+      .querySelector('.player-' + activePlayer + '-panel')
+      .classList.remove('active');
+  } else {
+    // Next player;
+    nextPlayer();
+  }
+});
+
+function nextPlayer() {
+  // Next player
+  roundScore = 0;
+  document.querySelector('#current-' + activePlayer).textContent = roundScore;
+  activePlayer === 0 ? activePlayer++ : activePlayer--;
+  document.querySelector('.player-0-panel').classList.toggle('active');
+  document.querySelector('.player-1-panel').classList.toggle('active');
+  document.querySelector('.dice').style.display = 'none';
+}
 
 // Rewrite html element (Manipulate)
 // document.querySelector('#current-' + activePlayer).textContent = dice;
